@@ -1,5 +1,7 @@
 # !/bin/source.
 
+# Ca fait la diff
+
 export PROJECT_ROOT=".."
 
 # Compile all components in directory
