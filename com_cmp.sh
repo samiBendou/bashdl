@@ -2,6 +2,16 @@
 
 # Compile given components
 
+if [ -z $PROJECT_ROOT ]
+then
+    PROJECT_ROOT=".."
+fi
+
+if [ -z $LIB_NAME ]
+then
+    LIB_NAME="rtl"
+fi
+
 for CMP_NAME in $*
 do
     echo ""
@@ -9,8 +19,8 @@ do
 
     # Compiling source
     echo ""
-    echo "Compiling $PROJECT_ROOT/src/rtl/$CMP_NAME.vhd"
-    vcom -work lib_rtl $PROJECT_ROOT/src/rtl/$CMP_NAME.vhd
+    echo "Compiling $PROJECT_ROOT/src/$LIB_NAME/$CMP_NAME.vhd"
+    vcom -work lib_rtl $PROJECT_ROOT/src/$LIB_NAME/$CMP_NAME.vhd
 
     if [[ `find $PROJECT_ROOT/src/bench/ -name "${CMP_NAME}_bench.vhd" 2> /dev/null` ]]
     then
