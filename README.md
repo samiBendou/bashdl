@@ -3,12 +3,13 @@ Bash scripts to compile VHDL and Verilog sources. This project is a template tha
 
 ## Usage
 First we assume that you must have at least the following arboresence from root directory :
-- bash
+- bashdl
 - lib
 - src
     - rtl
     - bench
-Put the `.sh` files into the bash directory
+
+The bashdl directory contains the content of this repository.
 
 Open a terminal into the `bash` directory and type :
 
