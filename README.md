@@ -8,8 +8,9 @@ First we assume that you must have at least the following arboresence from root 
 - src
     - rtl
     - bench
+Put the `.sh` files into the bash directory
 
-Go to the `bash` directory and write :
+Open a terminal into the `bash` directory and type :
 
 ```shell
 $ ./com_cmp.sh adder_4 mult_16 counter32
