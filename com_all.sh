@@ -5,7 +5,7 @@
 export PROJECT_ROOT=".."
 export LIB_NAME="rtl"
 
-if [ $1 != "" ]
+if [ -n "$1" ]
 then
     LIB_NAME=$1
 fi
