@@ -4,13 +4,13 @@
 
 export PROJECT_ROOT=".."
 export LIB_NAME="rtl"
+OPTIND=1
 
-if [ -n "$1" ]
-then
-    LIB_NAME=$1
-fi
-
-
+function usage()
+{
+  echo "usage: $0 [-s] [-r PROJECT_ROOT] [-l LIB_NAME]"
+  exit 2
+}
 
 function deep_count_dep()
 {
@@ -38,14 +38,12 @@ function deep_count_dep()
 function sort_by_dep_count()
 {
     # Counting the deep number of dependancies for each component 
-
     for i in $(seq 1 `echo ${CMP_NAMES[@]} | wc -w`)
     do
         DEP_COUNT[i-1]=$(deep_count_dep ${CMP_NAMES[i-1]})
     done
 
     # Sorting components by number of dependancies
-
     j=0
     for i in $(seq 2 `echo ${CMP_NAMES[@]} | wc -w`)
     do
@@ -65,46 +63,57 @@ function sort_by_dep_count()
     echo ${CMP_NAMES[@]}
 }
 
+function clean_lib() 
+{
+    vdel -lib $PROJECT_ROOT/lib/lib_$1 -all
+    vlib $PROJECT_ROOT/lib/lib_$1
+    vmap lib_$1 $PROJECT_ROOT/lib/lib_$1
+}
+
+OPT_SYNTHESIS=""
+
+while getopts 'h?sl:r:' c
+do
+  case $c in
+    h|\?) usage ;;
+    l) LIB_NAME=$OPTARG ;;
+    s) OPT_SYNTHESIS="-s" ;;
+    r) PROJECT_ROOT=$OPTARG ;;
+  esac
+done
+
 echo ""
 echo "** COMPILING FILES IN  $PROJECT_ROOT/src/$LIB_NAME/ **"
 
 echo ""
-echo "Cleaning libraries..."
-echo ""
-echo "**** $LIB_NAME ****"
-vdel -lib $PROJECT_ROOT/lib/lib_$LIB_NAME -all
-vlib $PROJECT_ROOT/lib/lib_$LIB_NAME
-vmap lib_rtl $PROJECT_ROOT/lib/lib_$LIB_NAME
+echo "Searching components..."
+CMP_NAMES=(`ls $PROJECT_ROOT/src/$LIB_NAME/ 2> /dev/null | grep ".*.vhd" | cut -d . -f 1`)
 
-echo "**** bench ****"
-vdel -lib $PROJECT_ROOT/lib/lib_bench -all
-vlib $PROJECT_ROOT/lib/lib_bench
-vmap lib_bench $PROJECT_ROOT/lib/lib_bench
+if [ -z "${CMP_NAMES[*]}" ]
+then
+    echo "ERROR: No components found at $PROJECT_ROOT/src/$LIB_NAME/"
+    exit 2
+fi
 
-#nettoyage des bibliotheques de travail
-
-echo "**** gates ****"
-vdel -lib $PROJECT_ROOT/lib/lib_gates -all
-vlib $PROJECT_ROOT/lib/lib_gates
-vmap lib_bench $PROJECT_ROOT/lib/lib_gates
-
-#compilation des fichiers sources
-
-echo ""
-
-echo "Finding components..."
-CMP_NAMES=(`ls $PROJECT_ROOT/src/$LIB_NAME/ | grep ".*.vhd" | cut -d . -f 1`)
-echo ""
 echo ${CMP_NAMES[@]}
 echo ""
 echo "Resolving dependancies..."
 CMP_NAMES=`sort_by_dep_count`
+echo $CMP_NAMES
 
 echo ""
-echo $CMP_NAMES
+echo "Cleaning libraries..."
+echo "**** $LIB_NAME ****"
+`clean_lib $LIB_NAME`
+echo "**** bench ****"
+`clean_lib bench`
+echo "**** gates ****"
+`clean_lib gates`
+
+
 echo ""
 echo "Starting compilation..."
 NUMBER_OF_FILES=`ls $PROJECT_ROOT/src/$LIB_NAME/ | grep ".*.vhd" | wc -l`
-source com_cmp.sh $CMP_NAMES
+source com_cmp.sh $OPT_SYNTHESIS $CMP_NAMES
 echo ""
 echo "Number of files compiled : $NUMBER_OF_FILES"
