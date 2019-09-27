@@ -29,4 +29,10 @@ do
 
     else echo "WARNING: No test bench found for $CMP_NAME" ;
     fi
+
+    echo "Compiling $PROJECT_ROOT/src/gates/$CMP_NAME.vhd"
+    vlog -work lib_gates ./src/gates/${CMP_NAME}.v
+
+    echo "Compiling $PROJECT_ROOT/src/bench/${CMP_NAME}_synth_bench.vhd"
+    vcom -work lib_bench ./src/bench/${CMP_NAME}_synth_bench.vhd
 done

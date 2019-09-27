@@ -10,6 +10,8 @@ then
     LIB_NAME=$1
 fi
 
+
+
 function deep_count_dep()
 {
 
@@ -79,7 +81,17 @@ vdel -lib $PROJECT_ROOT/lib/lib_bench -all
 vlib $PROJECT_ROOT/lib/lib_bench
 vmap lib_bench $PROJECT_ROOT/lib/lib_bench
 
+#nettoyage des bibliotheques de travail
+
+echo "**** gates ****"
+vdel -lib $PROJECT_ROOT/lib/lib_gates -all
+vlib $PROJECT_ROOT/lib/lib_gates
+vmap lib_bench $PROJECT_ROOT/lib/lib_gates
+
+#compilation des fichiers sources
+
 echo ""
+
 echo "Finding components..."
 CMP_NAMES=(`ls $PROJECT_ROOT/src/$LIB_NAME/ | grep ".*.vhd" | cut -d . -f 1`)
 echo ""
