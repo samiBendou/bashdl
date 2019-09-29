@@ -49,7 +49,7 @@ In general the syntax is the following :
 
 ```
 ./com_all.sh [-s] [-r PROJECT_ROOT] [-l LIB_NAME]
-```
+```kK
 
 
 **Note** If it doesn't work try `source com_all.sh`
