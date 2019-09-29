@@ -29,6 +29,8 @@ In general the syntax is the following :
 ./com_cmp.sh [-s] [-l LIB_NAME] [-r PROJECT_ROOT] CMP_NAMES
 ```
 
+**Note** If it doesn't work try `source com_cmp.sh`
+
 ### Library compilation
 
 Open a terminal at the root of the project and go to the `bashdl` directory. Run the script `./com_all.sh` to compile all the components in a given directory.
@@ -48,3 +50,6 @@ In general the syntax is the following :
 ```
 ./com_all.sh [-s] [-r PROJECT_ROOT] [-l LIB_NAME]
 ```
+
+
+**Note** If it doesn't work try `source com_all.sh`
