@@ -41,7 +41,10 @@ CMP_NAME=$@
 BENCH_NAME=lib_${BENCH_SUFIX}.${CMP_NAME}_${BENCH_SUFIX}_${CONF_SUFIX}
 DO_PATH=${PROJECT_ROOT}/src/do/${CMP_NAME}_${BENCH_SUFIX}_wave.do
 
-echo "RUNNING ${BENCH_NAME}"
+echo ""
+echo "** RUNNING ${BENCH_NAME} **"
+echo ""
+
 if [ `find ${DO_PATH}` ]
 then
     vsim ${BENCH_NAME} -do ${DO_PATH}
