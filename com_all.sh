@@ -9,7 +9,7 @@ OPTIND=1
 
 function usage()
 {
-  echo "usage: $0 [-s] [-r PROJECT_ROOT] [-l LIB_NAME]"
+  echo "usage: $0 [-s] [-r PROJECT_ROOT] [-l LIB_NAME] [-b BENCH_SUFIX]"
   exit 2
 }
 

@@ -26,7 +26,7 @@ The second lines compiles and synthetizes the adder_4 component. You must provid
 
 In general the syntax is the following :
 ```
-./com_cmp.sh [-s] [-l LIB_NAME] [-r PROJECT_ROOT] CMP_NAMES
+./com_cmp.sh [-s] [-l LIB_NAME] [-r PROJECT_ROOT] [-b BENCH_SUFIX ] CMP_NAMES
 ```
 
 **Note** If it doesn't work try `source com_cmp.sh`
@@ -48,8 +48,19 @@ The tird line compiles all the files in the `lib_thirdparty` directory that must
 In general the syntax is the following :
 
 ```
-./com_all.sh [-s] [-r PROJECT_ROOT] [-l LIB_NAME]
-```kK
-
+./com_all.sh [-s] [-r PROJECT_ROOT] [-l LIB_NAME] [-b BENCH_SUFIX ]
+```
 
 **Note** If it doesn't work try `source com_all.sh`
+
+### Run a test bench
+
+Open a terminal at the root of the project and go to the `bashdl` directory. Run the script `./run_cmp.sh` to run a component test bench.
+
+In general the syntax is the following :
+
+```
+./run_cmp.sh [-r PROJECT_ROOT] [-b BENCH_SUFIX] [-c CONF_SUFIX ] CMP_NAME
+```
+
+**Note** If it doesn't work try `source run_cmp.sh MyCmp`

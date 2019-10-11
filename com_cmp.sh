@@ -2,7 +2,7 @@
 
 function usage()
 {
-  echo "usage: $0 [-s] [-l LIB_NAME] [-r PROJECT_ROOT] CMP_NAMES"
+  echo "usage: $0 [-s] [-l LIB_NAME] [-r PROJECT_ROOT] [-b BENCH_SUFIX] CMP_NAMES"
   exit 2
 }
 
@@ -42,19 +42,24 @@ shift $((OPTIND-1))
 
 for CMP_NAME in $@
 do
+    CMP_PATH=$PROJECT_ROOT/src/$LIB_NAME/$CMP_NAME.vhd
+    BENCH_PATH=$PROJECT_ROOT/src/$BENCH_SUFIX/${CMP_NAME}_${BENCH_SUFIX}.vhd
+    GATE_PATH=$PROJECT_ROOT/src/gates/$CMP_NAME.v
+    SYNTH_BENCH_PATH=$PROJECT_ROOT/src/$BENCH_SUFIX/${CMP_NAME}_synth_${BENCH_SUFIX}.vhd
+
     echo ""
     echo "**** $CMP_NAME ****"
 
     echo ""
-    echo "Compiling $PROJECT_ROOT/src/$LIB_NAME/$CMP_NAME.vhd"
-    vcom -work lib_$LIB_NAME $PROJECT_ROOT/src/$LIB_NAME/$CMP_NAME.vhd
+    echo "Compiling $CMP_PATH"
+    vcom -work lib_$LIB_NAME $CMP_PATH
 
-    if [[ `find $PROJECT_ROOT/src/${BENCH_SUFIX}/ -name "${CMP_NAME}_${BENCH_SUFIX}.vhd" 2> /dev/null` ]]
+    if [[ `find $PROJECT_ROOT/src/$BENCH_SUFIX/ -name "${CMP_NAME}_${BENCH_SUFIX}.vhd" 2> /dev/null` ]]
     then
-        echo "Compiling $PROJECT_ROOT/src/${BENCH_SUFIX}/${CMP_NAME}_${BENCH_SUFIX}.vhd"
-        vcom -work lib_${BENCH_SUFIX} $PROJECT_ROOT/src/${BENCH_SUFIX}/${CMP_NAME}_${BENCH_SUFIX}.vhd
+        echo "Compiling $BENCH_PATH"
+        vcom -work lib_$BENCH_SUFIX $BENCH_PATH
 
-    else echo "WARNING: No test bench found for $CMP_NAME at $PROJECT_ROOT/src/${BENCH_SUFIX}/${CMP_NAME}_${BENCH_SUFIX}.vhd" ;
+    else echo "WARNING: No test bench found for $CMP_NAME at $BENCH_PATH" ;
     fi
 
     if [ $DO_SYNTHESIS == "FALSE" ]
@@ -64,19 +69,18 @@ do
     
     if [[ `find $PROJECT_ROOT/src/gates/ -name "${CMP_NAME}.v" 2> /dev/null` ]]
     then
-        echo "Compiling $PROJECT_ROOT/src/gates/$CMP_NAME.v"
-        vlog -work lib_gates ./src/gates/${CMP_NAME}.v
+        echo "Compiling $GATE_PATH"
+        vlog -work lib_gates $GATE_PATH
     else
-        echo "ERROR: No synthesis file provided for $CMP_NAME"
+        echo "ERROR: No synthesis file provided for $CMP_NAME at $GATE_PATH"
         continue
     fi
 
     if [[ `find $PROJECT_ROOT/src/bench/ -name "${CMP_NAME}_${BENCH_SUFIX}.vhd" 2> /dev/null` ]]
     then
-        echo "Compiling $PROJECT_ROOT/src/bench/${CMP_NAME}_synth_${BENCH_SUFIX}.vhd"
-        vcom -work lib_${BENCH_SUFIX} ./src/bench/${CMP_NAME}_synth_${BENCH_SUFIX}.vhd
-
-    else echo "WARNING: No synthesis test bench found for $CMP_NAME" ;
+        echo "Compiling $SYNTH_BENCH_PATH"
+        vcom -work lib_${BENCH_SUFIX} $SYNTH_BENCH_PATH
+    else echo "WARNING: No synthesis test bench found for $CMP_NAME at $SYNTH_BENCH_PATH" ;
     fi
 
 done
