@@ -4,6 +4,7 @@
 
 export PROJECT_ROOT=".."
 export LIB_NAME="rtl"
+export BENCH_SUFIX="bench"
 OPTIND=1
 
 function usage()
@@ -15,7 +16,7 @@ function usage()
 function deep_count_dep()
 {
 
-    DEP_NAMES=`cat $PROJECT_ROOT/src/$LIB_NAME/$1.vhd | grep "component .*" | sed 's/ *component *//g' 2> /dev/null`
+    DEP_NAMES=`cat $PROJECT_ROOT/src/$LIB_NAME/$1.vhd | grep "^component .*" | sed 's/ *component *//g' 2> /dev/null`
     DEP_COUNT=`echo $DEP_NAMES | wc -w`
     DEEP_DEP_COUNT=$DEP_COUNT
     CHILD_COUNT=0
@@ -72,13 +73,14 @@ function clean_lib()
 
 OPT_SYNTHESIS=""
 
-while getopts 'h?sl:r:' c
+while getopts 'h?sl:r:b:' c
 do
   case $c in
     h|\?) usage ;;
     l) LIB_NAME=$OPTARG ;;
     s) OPT_SYNTHESIS="-s" ;;
     r) PROJECT_ROOT=$OPTARG ;;
+    b) BENCH_SUFIX=$OPTARG ;;
   esac
 done
 
@@ -105,8 +107,8 @@ echo ""
 echo "Cleaning libraries..."
 echo "**** $LIB_NAME ****"
 `clean_lib $LIB_NAME`
-echo "**** bench ****"
-`clean_lib bench`
+echo "**** $BENCH_SUFIX ****"
+`clean_lib $BENCH_SUFIX`
 echo "**** gates ****"
 `clean_lib gates`
 

@@ -38,12 +38,12 @@ Open a terminal at the root of the project and go to the `bashdl` directory. Run
 ```
 $ ./com_all.sh
 $ ./com_all.sh -s
-$ ./com_all.sh -l thirdparty
+$ ./com_all.sh -l lib_thirdparty
 ```
 
 First second line compiles all the files in `rtl` directory and their test bench if theses are implemented. 
 
-The tird line compiles all the files in the `thirdparty` directory that must be located located in the `src` directory. Benchs files have to be located in the `bench` directory.
+The tird line compiles all the files in the `lib_thirdparty` directory that must be located located in the `src` directory. Benchs files have to be located in the `bench` directory.
 
 In general the syntax is the following :
 
